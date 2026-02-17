@@ -19,3 +19,25 @@ type AdItem struct {
 	} `json:"address"`
 	CreatedAt time.Time `json:"created_at"`
 }
+
+func ToAdItem(a Ad) AdItem {
+	item := AdItem{
+		ID:        a.ID,
+		Type:      a.Type,
+		PriceBRL:  a.PriceBRL,
+		CreatedAt: a.CreatedAt,
+	}
+	item.Address.CEP = a.CEP
+	item.Address.Street = a.Street
+	item.Address.Number = a.Number
+	item.Address.Complement = a.Complement
+	item.Address.Neighborhood = a.Neighborhood
+	item.Address.City = a.City
+	item.Address.State = a.State
+
+	if a.ImagePath != nil && *a.ImagePath != "" {
+		u := "/static/images/" + *a.ImagePath
+		item.ImageURL = &u
+	}
+	return item
+}

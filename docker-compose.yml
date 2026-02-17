@@ -21,15 +21,15 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./imobifix-api/migrations:/migrations:ro
+      - ./imobifx-api/migrations:/migrations:ro
     command: >
       -path=/migrations
       -database=postgres://imobifx:imobifx@postgres:5432/imobifx?sslmode=disable
       up
 
-  imobifix-api:
+  imobifx-api:
     build:
-      context: ./imobifix-api
+      context: ./imobifx-api
     environment:
       APP_PORT: "8080"
       DB_DSN: "postgres://imobifx:imobifx@postgres:5432/imobifx?sslmode=disable"

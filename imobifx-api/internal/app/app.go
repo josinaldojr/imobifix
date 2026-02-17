@@ -26,7 +26,7 @@ func Run(cfg config.Config) error {
 
 	viaCEP := viacep.NewClient(cfg.ViaCepBaseURL, cfg.ViaCepTimeout)
 
-	adsSvc := service.NewAdsService(db, cfg.ImagesDir)
+	adsSvc := service.NewAdsService(db, cfg.ImagesDir, cfg.MaxImageBytes)
 	quotesSvc := service.NewQuotesService(db)
 
 	app := fiber.New(fiber.Config{

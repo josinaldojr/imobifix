@@ -30,5 +30,5 @@ func RegisterRoutes(app *fiber.App, d Deps) {
 	api.Get("/quotes/current", handlers.CurrentQuote(d.Quotes))
 
 	api.Post("/ads", handlers.CreateAd(d.Config, d.Ads))
-	api.Get("/ads", handlers.ListAds(d.Ads, d.Quotes))
+	//api.Get("/ads", handlers.ListAds(d.Ads, d.Quotes))
 }
