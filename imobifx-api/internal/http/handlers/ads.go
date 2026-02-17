@@ -26,3 +26,17 @@ func CreateAd(cfg config.Config, ads *service.AdsService) fiber.Handler {
 		return c.Status(http.StatusCreated).JSON(item)
 	}
 }
+
+func ListAds(ads *service.AdsService) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		in, err := requests.BindListAds(c)
+		if err != nil {
+			return err
+		}
+		resp, err := ads.List(c.UserContext(), in)
+		if err != nil {
+			return err
+		}
+		return c.JSON(resp)
+	}
+}

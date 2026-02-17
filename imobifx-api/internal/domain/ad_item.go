@@ -1,6 +1,9 @@
 package domain
 
-import "time"
+import (
+	"strings"
+	"time"
+)
 
 type AdItem struct {
 	ID       string   `json:"id"`
@@ -38,6 +41,37 @@ func ToAdItem(a Ad) AdItem {
 	if a.ImagePath != nil && *a.ImagePath != "" {
 		u := "/static/images/" + *a.ImagePath
 		item.ImageURL = &u
+	}
+	return item
+}
+
+func round2(val float64) float64 {
+	return float64(int(val*100+0.5)) / 100
+}
+
+func ToAdItemWithQuote(a Ad, quote *Quote) AdItem {
+	item := AdItem{
+		ID:        a.ID,
+		Type:      a.Type,
+		PriceBRL:  a.PriceBRL,
+		CreatedAt: a.CreatedAt,
+	}
+	item.Address.CEP = a.CEP
+	item.Address.Street = a.Street
+	item.Address.Number = a.Number
+	item.Address.Complement = a.Complement
+	item.Address.Neighborhood = a.Neighborhood
+	item.Address.City = a.City
+	item.Address.State = a.State
+
+	if a.ImagePath != nil && strings.TrimSpace(*a.ImagePath) != "" {
+		u := "/static/images/" + *a.ImagePath
+		item.ImageURL = &u
+	}
+
+	if quote != nil {
+		v := round2(a.PriceBRL * quote.BrlToUsd)
+		item.PriceUSD = &v
 	}
 	return item
 }

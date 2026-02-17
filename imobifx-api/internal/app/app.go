@@ -3,16 +3,22 @@ package app
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/josinaldojr/imobifix-api/internal/config"
 	"github.com/josinaldojr/imobifix-api/internal/errors"
 	"github.com/josinaldojr/imobifix-api/internal/http"
+	middlewares "github.com/josinaldojr/imobifix-api/internal/http/midlewares"
+
 	"github.com/josinaldojr/imobifix-api/internal/integrations/viacep"
+	"github.com/josinaldojr/imobifix-api/internal/logging"
 	"github.com/josinaldojr/imobifix-api/internal/repo"
 	"github.com/josinaldojr/imobifix-api/internal/service"
 )
@@ -26,8 +32,12 @@ func Run(cfg config.Config) error {
 
 	viaCEP := viacep.NewClient(cfg.ViaCepBaseURL, cfg.ViaCepTimeout)
 
+	addressSvc := service.NewAddressService(viaCEP)
 	adsSvc := service.NewAdsService(db, cfg.ImagesDir, cfg.MaxImageBytes)
 	quotesSvc := service.NewQuotesService(db)
+
+	log := logging.New(cfg)
+	slog.SetDefault(log)
 
 	app := fiber.New(fiber.Config{
 		AppName:      "ImobiFX",
@@ -35,13 +45,17 @@ func Run(cfg config.Config) error {
 		ErrorHandler: errors.FiberErrorHandler,
 	})
 
+	app.Use(requestid.New())
+	app.Use(recover.New(recover.Config{EnableStackTrace: true}))
+	app.Use(middlewares.AccessLog(log))
+
 	app.Static("/static/images", cfg.ImagesDir)
 
 	http.RegisterRoutes(app, http.Deps{
-		Config: cfg,
-		ViaCEP: viaCEP,
-		Ads:    adsSvc,
-		Quotes: quotesSvc,
+		Config:  cfg,
+		Address: addressSvc,
+		Ads:     adsSvc,
+		Quotes:  quotesSvc,
 	})
 
 	errCh := make(chan error, 1)

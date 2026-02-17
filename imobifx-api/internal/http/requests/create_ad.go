@@ -7,22 +7,22 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/josinaldojr/imobifix-api/internal/domain"
 	"github.com/josinaldojr/imobifix-api/internal/errors"
+	"github.com/josinaldojr/imobifix-api/internal/usecase"
 )
 
-func BindCreateAd(c *fiber.Ctx) (domain.CreateAdInput, *multipart.FileHeader, error) {
+func BindCreateAd(c *fiber.Ctx) (usecase.CreateAdInput, *multipart.FileHeader, error) {
 	typ := strings.ToUpper(strings.TrimSpace(c.FormValue("type")))
 	priceStr := strings.TrimSpace(c.FormValue("price_brl"))
 
 	price, err := strconv.ParseFloat(priceStr, 64)
 	if err != nil {
-		return domain.CreateAdInput{}, nil, errors.New(http.StatusBadRequest, "VALIDATION_ERROR", "Dados inválidos.", fiber.Map{"price_brl": "must be a number"})
+		return usecase.CreateAdInput{}, nil, errors.New(http.StatusBadRequest, "VALIDATION_ERROR", "Dados inválidos.", fiber.Map{"price_brl": "must be a number"})
 	}
 
 	cepRaw := strings.TrimSpace(c.FormValue("cep"))
 
-	in := domain.CreateAdInput{
+	in := usecase.CreateAdInput{
 		Type:         typ,
 		PriceBRL:     price,
 		CEP:          cepRaw,

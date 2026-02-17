@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -42,6 +43,14 @@ type viaCepResp struct {
 
 func (c *Client) Lookup(ctx context.Context, cep8digits string) (domain.Address, error) {
 	url := fmt.Sprintf("%s/ws/%s/json/", c.baseURL, cep8digits)
+
+	start := time.Now()
+	defer func() {
+		slog.Debug("viacep_call",
+			slog.String("cep", cep8digits),
+			slog.Int64("latency_ms", time.Since(start).Milliseconds()),
+		)
+	}()
 
 	req, _ := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	resp, err := c.http.Do(req)
