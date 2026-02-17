@@ -1,0 +1,14 @@
+{
+  "request": { "method": "GET", "url": "/ws/58000000/json/" },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": {
+      "cep": "58000-000",
+      "logradouro": "Rua X",
+      "bairro": "Centro",
+      "localidade": "João Pessoa",
+      "uf": "PB"
+    }
+  }
+}

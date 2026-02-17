@@ -40,3 +40,17 @@ migrate-up:
 	  migrate/migrate:v4.17.1 \
 	  -path=/migrations \
 	  -database "postgres://imobifx:imobifx@postgres:5432/imobifx?sslmode=disable" up
+
+e2e-up:
+	docker compose up -d --build
+
+e2e-down:
+	docker compose down -v
+
+e2e:
+	@set -e; \
+	$(MAKE) e2e-up; \
+	trap '$(MAKE) e2e-down' EXIT; \
+	export BASE_URL=http://localhost:8080; \
+	export TEST_DB_DSN='postgres://imobifx:imobifx@localhost:5432/imobifx?sslmode=disable'; \
+	go test -tags=e2e ./test/e2e -v
