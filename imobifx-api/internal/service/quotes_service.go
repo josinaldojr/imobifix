@@ -5,14 +5,13 @@ import (
 	"time"
 
 	"github.com/josinaldojr/imobifix-api/internal/domain"
-	"github.com/josinaldojr/imobifix-api/internal/repo"
 )
 
 type QuotesService struct {
-	db *repo.DB
+	db QuotesRepository
 }
 
-func NewQuotesService(db *repo.DB) *QuotesService {
+func NewQuotesService(db QuotesRepository) *QuotesService {
 	return &QuotesService{db: db}
 }
 

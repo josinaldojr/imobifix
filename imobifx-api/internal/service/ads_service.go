@@ -17,12 +17,12 @@ import (
 )
 
 type AdsService struct {
-	db           *repo.DB
+	db           AdsRepository
 	imagesDir    string
 	maxImageSize int64
 }
 
-func NewAdsService(db *repo.DB, imagesDir string, maxImageSize int64) *AdsService {
+func NewAdsService(db AdsRepository, imagesDir string, maxImageSize int64) *AdsService {
 	_ = os.MkdirAll(imagesDir, 0o755)
 	return &AdsService{db: db, imagesDir: imagesDir, maxImageSize: maxImageSize}
 }

@@ -11,10 +11,10 @@ import (
 )
 
 type AddressService struct {
-	client *viacep.Client
+	client ViaCEPClient
 }
 
-func NewAddressService(client *viacep.Client) *AddressService {
+func NewAddressService(client ViaCEPClient) *AddressService {
 	return &AddressService{client: client}
 }
 

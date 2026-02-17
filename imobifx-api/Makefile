@@ -15,6 +15,21 @@ ps:
 test:
 	go test ./... -v
 
+test-integration:
+	@set -a; [ -f .env.test ] && . ./.env.test; set +a; \
+	go test -tags=integration ./... -v
+
+cover:
+	go test ./... -coverpkg=./... -coverprofile=cover.out
+	go tool cover -func=cover.out
+
+cover-html:
+	go test ./... -coverpkg=./... -coverprofile=cover.out
+	go tool cover -html=cover.out -o cover.html
+	@echo "Gerado: $(CURDIR)/cover.html"
+	@command -v open >/dev/null && open cover.html || true
+	@command -v xdg-open >/dev/null && xdg-open cover.html || true
+
 fmt:
 	cd imobifix-api && gofmt -w .
 
