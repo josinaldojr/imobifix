@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: imobifx
+      POSTGRES_PASSWORD: imobifx
+      POSTGRES_DB: imobifx
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U imobifx -d imobifx"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  migrate:
+    image: migrate/migrate:v4.17.1
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./imobifix-api/migrations:/migrations:ro
+    command: >
+      -path=/migrations
+      -database=postgres://imobifx:imobifx@postgres:5432/imobifx?sslmode=disable
+      up
+
+  imobifix-api:
+    build:
+      context: ./imobifix-api
+    environment:
+      APP_PORT: "8080"
+      DB_DSN: "postgres://imobifx:imobifx@postgres:5432/imobifx?sslmode=disable"
+      VIA_CEP_BASE_URL: "https://viacep.com.br"
+      VIA_CEP_TIMEOUT_MS: "2500"
+      IMAGES_DIR: "/data/images"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_started
+    volumes:
+      - images-data:/data/images
+
+volumes:
+  pgdata:
+  images-data:
