@@ -12,8 +12,8 @@ logs:
 ps:			
 	docker compose ps
 
-imobifix-api-test:
-	cd imobifix-api && go test ./... -v
+test:
+	go test ./... -v
 
 fmt:
 	cd imobifix-api && gofmt -w .
