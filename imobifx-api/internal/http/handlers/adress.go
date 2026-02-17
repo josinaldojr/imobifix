@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/josinaldojr/imobifix-api/internal/service"
+	"github.com/josinaldojr/imobifx-api/internal/service"
 )
 
 func Address(svc *service.AddressService) fiber.Handler {

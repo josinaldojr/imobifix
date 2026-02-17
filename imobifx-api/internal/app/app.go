@@ -12,15 +12,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
-	"github.com/josinaldojr/imobifix-api/internal/config"
-	"github.com/josinaldojr/imobifix-api/internal/errors"
-	"github.com/josinaldojr/imobifix-api/internal/http"
-	middlewares "github.com/josinaldojr/imobifix-api/internal/http/midlewares"
+	"github.com/josinaldojr/imobifx-api/internal/config"
+	"github.com/josinaldojr/imobifx-api/internal/errors"
+	"github.com/josinaldojr/imobifx-api/internal/http"
+	middlewares "github.com/josinaldojr/imobifx-api/internal/http/midlewares"
 
-	"github.com/josinaldojr/imobifix-api/internal/integrations/viacep"
-	"github.com/josinaldojr/imobifix-api/internal/logging"
-	"github.com/josinaldojr/imobifix-api/internal/repo"
-	"github.com/josinaldojr/imobifix-api/internal/service"
+	"github.com/josinaldojr/imobifx-api/internal/integrations/viacep"
+	"github.com/josinaldojr/imobifx-api/internal/logging"
+	"github.com/josinaldojr/imobifx-api/internal/repo"
+	"github.com/josinaldojr/imobifx-api/internal/service"
 )
 
 func Run(cfg config.Config) error {

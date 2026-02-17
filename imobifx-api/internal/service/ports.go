@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/josinaldojr/imobifix-api/internal/domain"
-	"github.com/josinaldojr/imobifix-api/internal/repo"
+	"github.com/josinaldojr/imobifx-api/internal/domain"
+	"github.com/josinaldojr/imobifx-api/internal/repo"
 )
 
 type AdsRepository interface {

@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/josinaldojr/imobifix-api/internal/errors"
-	"github.com/josinaldojr/imobifix-api/internal/usecase"
+	"github.com/josinaldojr/imobifx-api/internal/errors"
+	"github.com/josinaldojr/imobifx-api/internal/usecase"
 )
 
 func BindListAds(c *fiber.Ctx) (usecase.ListAdsInput, error) {

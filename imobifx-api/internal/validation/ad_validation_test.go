@@ -8,9 +8,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/require"
 
-	"github.com/josinaldojr/imobifix-api/internal/errors"
-	"github.com/josinaldojr/imobifix-api/internal/usecase"
-	"github.com/josinaldojr/imobifix-api/internal/validation"
+	"github.com/josinaldojr/imobifx-api/internal/errors"
+	"github.com/josinaldojr/imobifx-api/internal/usecase"
+	"github.com/josinaldojr/imobifx-api/internal/validation"
 )
 
 func TestNormalizeCEP_OK(t *testing.T) {

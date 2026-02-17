@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/josinaldojr/imobifix-api/internal/errors"
-	"github.com/josinaldojr/imobifix-api/internal/usecase"
+	"github.com/josinaldojr/imobifx-api/internal/errors"
+	"github.com/josinaldojr/imobifx-api/internal/usecase"
 )
 
 var cepRe = regexp.MustCompile(`^\d{8}$`)

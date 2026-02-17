@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/josinaldojr/imobifix-api/internal/usecase"
-	"github.com/josinaldojr/imobifix-api/internal/validation"
+	"github.com/josinaldojr/imobifx-api/internal/usecase"
+	"github.com/josinaldojr/imobifx-api/internal/validation"
 )
 
 func TestValidateListAdsInput_OK_Default(t *testing.T) {

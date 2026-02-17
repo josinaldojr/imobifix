@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/josinaldojr/imobifix-api/internal/domain"
-	"github.com/josinaldojr/imobifix-api/internal/repo"
+	"github.com/josinaldojr/imobifx-api/internal/domain"
+	"github.com/josinaldojr/imobifx-api/internal/repo"
 )
 
 func TestAds_CreateAndList_WithFilters(t *testing.T) {

@@ -3,8 +3,8 @@ package validation_test
 import (
 	"testing"
 
-	"github.com/josinaldojr/imobifix-api/internal/usecase"
-	"github.com/josinaldojr/imobifix-api/internal/validation"
+	"github.com/josinaldojr/imobifx-api/internal/usecase"
+	"github.com/josinaldojr/imobifx-api/internal/validation"
 	"github.com/stretchr/testify/require"
 )
 

@@ -1,4 +1,4 @@
-module github.com/josinaldojr/imobifix-api
+module github.com/josinaldojr/imobifx-api
 
 go 1.24.0
 

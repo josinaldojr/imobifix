@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/josinaldojr/imobifix-api/internal/integrations/viacep"
+	"github.com/josinaldojr/imobifx-api/internal/integrations/viacep"
 )
 
 func TestLookup_OK(t *testing.T) {

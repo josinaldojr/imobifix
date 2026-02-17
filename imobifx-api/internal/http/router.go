@@ -2,10 +2,10 @@ package http
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/josinaldojr/imobifix-api/internal/config"
-	"github.com/josinaldojr/imobifix-api/internal/http/handlers"
-	"github.com/josinaldojr/imobifix-api/internal/repo"
-	"github.com/josinaldojr/imobifix-api/internal/service"
+	"github.com/josinaldojr/imobifx-api/internal/config"
+	"github.com/josinaldojr/imobifx-api/internal/http/handlers"
+	"github.com/josinaldojr/imobifx-api/internal/repo"
+	"github.com/josinaldojr/imobifx-api/internal/service"
 )
 
 type Deps struct {

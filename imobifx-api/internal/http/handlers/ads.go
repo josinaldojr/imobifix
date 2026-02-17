@@ -4,10 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/josinaldojr/imobifix-api/internal/config"
-	"github.com/josinaldojr/imobifix-api/internal/domain"
-	"github.com/josinaldojr/imobifix-api/internal/http/requests"
-	"github.com/josinaldojr/imobifix-api/internal/service"
+	"github.com/josinaldojr/imobifx-api/internal/config"
+	"github.com/josinaldojr/imobifx-api/internal/domain"
+	"github.com/josinaldojr/imobifx-api/internal/http/requests"
+	"github.com/josinaldojr/imobifx-api/internal/service"
 )
 
 func CreateAd(cfg config.Config, ads *service.AdsService) fiber.Handler {

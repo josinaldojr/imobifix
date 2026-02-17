@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/josinaldojr/imobifix-api/internal/domain"
+	"github.com/josinaldojr/imobifx-api/internal/domain"
 )
 
 func (d *DB) CreateQuote(ctx context.Context, brlToUsd float64, effectiveAt time.Time) (domain.Quote, error) {

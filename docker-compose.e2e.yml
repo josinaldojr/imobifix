@@ -2,11 +2,11 @@ services:
   viacep-mock:
     image: wiremock/wiremock:3.9.1
     volumes:
-      - ./imobifix-api/test/viacep-mock/mappings:/home/wiremock/mappings:ro
+      - ./imobifx-api/test/viacep-mock/mappings:/home/wiremock/mappings:ro
     ports:
       - "8090:8080" 
 
-  imobifix-api:
+  imobifx-api:
     depends_on:
       - viacep-mock
     environment:

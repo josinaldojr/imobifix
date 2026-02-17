@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/josinaldojr/imobifix-api/internal/repo"
+	"github.com/josinaldojr/imobifx-api/internal/repo"
 )
 
 func TestQuotes_CreateAndGetCurrent(t *testing.T) {

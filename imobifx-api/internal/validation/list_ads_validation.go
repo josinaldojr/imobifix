@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/josinaldojr/imobifix-api/internal/errors"
-	"github.com/josinaldojr/imobifix-api/internal/usecase"
+	"github.com/josinaldojr/imobifx-api/internal/errors"
+	"github.com/josinaldojr/imobifx-api/internal/usecase"
 )
 
 func ValidateListAdsInput(in usecase.ListAdsInput) error {
@@ -36,6 +36,6 @@ func ValidateListAdsInput(in usecase.ListAdsInput) error {
 	if len(details) > 0 {
 		return errors.New(http.StatusBadRequest, "VALIDATION_ERROR", "Dados inválidos.", details)
 	}
-	
+
 	return nil
 }

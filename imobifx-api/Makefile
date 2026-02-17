@@ -1,16 +1,29 @@
-.PHONY: up down logs ps test fmt imobifix-api-test frontend-test
+.PHONY: up down logs ps \
+	test test-integration cover cover-html fmt \
+	migrate-up \
+	e2e-up e2e-down e2e \
+	e2e-logs e2e-ps
+
+ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/..)
+
+COMPOSE := docker compose --project-directory $(ROOT_DIR) \
+	-f $(ROOT_DIR)/docker-compose.yml
+
+COMPOSE_E2E := docker compose --project-directory $(ROOT_DIR) \
+	-f $(ROOT_DIR)/docker-compose.yml \
+	-f $(ROOT_DIR)/docker-compose.e2e.yml
 
 up:
-	docker compose up --build
+	$(COMPOSE) up --build
 
 down:
-	docker compose down -v
+	$(COMPOSE) down -v
 
 logs:
-	docker compose logs -f imobifix-api
+	$(COMPOSE) logs -f imobifx-api
 
-ps:			
-	docker compose ps
+ps:
+	$(COMPOSE) ps
 
 test:
 	go test ./... -v
@@ -21,7 +34,7 @@ test-integration:
 
 cover:
 	go test ./... -coverpkg=./... -coverprofile=cover.out
-	go tool cover -func=cover.out
+	go tool cover -func=cover.out | tail -n 1
 
 cover-html:
 	go test ./... -coverpkg=./... -coverprofile=cover.out
@@ -31,26 +44,26 @@ cover-html:
 	@command -v xdg-open >/dev/null && xdg-open cover.html || true
 
 fmt:
-	cd imobifix-api && gofmt -w .
+	gofmt -w .
 
 migrate-up:
-	docker run --rm \
-	  -v $(PWD)/imobifix-api/migrations:/migrations \
-	  --network imobifx_default \
-	  migrate/migrate:v4.17.1 \
-	  -path=/migrations \
-	  -database "postgres://imobifx:imobifx@postgres:5432/imobifx?sslmode=disable" up
+	$(COMPOSE) run --rm migrate
 
 e2e-up:
-	docker compose up -d --build
+	$(COMPOSE_E2E) up -d --build --force-recreate
 
 e2e-down:
-	docker compose down -v
+	$(COMPOSE_E2E) down -v
 
+e2e-logs:
+	$(COMPOSE_E2E) logs -f imobifx-api viacep-mock
+
+e2e-ps:
+	$(COMPOSE_E2E) ps
+	
 e2e:
 	@set -e; \
 	$(MAKE) e2e-up; \
 	trap '$(MAKE) e2e-down' EXIT; \
-	export BASE_URL=http://localhost:8080; \
-	export TEST_DB_DSN='postgres://imobifx:imobifx@localhost:5432/imobifx?sslmode=disable'; \
+	set -a; [ -f .env.test ] && . ./.env.test; set +a; \
 	go test -tags=e2e ./test/e2e -v

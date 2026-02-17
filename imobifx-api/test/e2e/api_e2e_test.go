@@ -10,7 +10,6 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
-	"net/http/httptest"
 	"net/textproto"
 	"os"
 	"strings"
@@ -200,7 +199,8 @@ func newMultipartRequest(t *testing.T, url string, fields map[string]string, fil
 
 	require.NoError(t, w.Close())
 
-	req := httptest.NewRequest(http.MethodPost, url, &b)
+	req, err := http.NewRequest(http.MethodPost, url, &b)
+	require.NoError(t, err)
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	return req
 }

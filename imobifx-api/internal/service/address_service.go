@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/josinaldojr/imobifix-api/internal/domain"
-	"github.com/josinaldojr/imobifix-api/internal/errors"
-	"github.com/josinaldojr/imobifix-api/internal/integrations/viacep"
-	"github.com/josinaldojr/imobifix-api/internal/validation"
+	"github.com/josinaldojr/imobifx-api/internal/domain"
+	"github.com/josinaldojr/imobifx-api/internal/errors"
+	"github.com/josinaldojr/imobifx-api/internal/integrations/viacep"
+	"github.com/josinaldojr/imobifx-api/internal/validation"
 )
 
 type AddressService struct {

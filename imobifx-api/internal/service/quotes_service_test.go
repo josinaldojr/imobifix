@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/josinaldojr/imobifix-api/internal/domain"
-	"github.com/josinaldojr/imobifix-api/internal/service"
+	"github.com/josinaldojr/imobifx-api/internal/domain"
+	"github.com/josinaldojr/imobifx-api/internal/service"
 )
 
 type fakeQuotesRepo struct {

@@ -5,9 +5,9 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	"github.com/josinaldojr/imobifix-api/internal/http/requests"
-	"github.com/josinaldojr/imobifix-api/internal/service"
-	"github.com/josinaldojr/imobifix-api/internal/validation"
+	"github.com/josinaldojr/imobifx-api/internal/http/requests"
+	"github.com/josinaldojr/imobifx-api/internal/service"
+	"github.com/josinaldojr/imobifx-api/internal/validation"
 )
 
 func CreateQuote(svc *service.QuotesService) fiber.Handler {

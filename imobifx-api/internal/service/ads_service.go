@@ -10,10 +10,10 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/josinaldojr/imobifix-api/internal/domain"
-	"github.com/josinaldojr/imobifix-api/internal/repo"
-	"github.com/josinaldojr/imobifix-api/internal/usecase"
-	"github.com/josinaldojr/imobifix-api/internal/validation"
+	"github.com/josinaldojr/imobifx-api/internal/domain"
+	"github.com/josinaldojr/imobifx-api/internal/repo"
+	"github.com/josinaldojr/imobifx-api/internal/usecase"
+	"github.com/josinaldojr/imobifx-api/internal/validation"
 )
 
 type AdsService struct {

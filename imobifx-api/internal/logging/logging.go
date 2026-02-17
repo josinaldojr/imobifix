@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/josinaldojr/imobifix-api/internal/config"
+	"github.com/josinaldojr/imobifx-api/internal/config"
 )
 
 func New(cfg config.Config) *slog.Logger {
