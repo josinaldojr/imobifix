@@ -1,0 +1,344 @@
+openapi: 3.0.3
+info:
+  title: ImobiFX API
+  version: "1.0.0"
+  description: API para anuncios imobiliarios, cotacoes BRL->USD e consulta de CEP.
+servers:
+  - url: http://localhost:8080
+paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: Verifica saude da API
+      responses:
+        "200":
+          description: API operacional
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+  /api/addresses/{cep}:
+    get:
+      tags: [Addresses]
+      summary: Consulta endereco por CEP
+      parameters:
+        - in: path
+          name: cep
+          required: true
+          schema:
+            type: string
+          description: CEP com 8 digitos (aceita formatado)
+      responses:
+        "200":
+          description: Endereco encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Address"
+        "400":
+          description: CEP invalido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "404":
+          description: CEP nao encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+        "503":
+          description: ViaCEP indisponivel
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+  /api/quotes:
+    post:
+      tags: [Quotes]
+      summary: Cria uma nova cotacao BRL -> USD
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuoteInput"
+      responses:
+        "201":
+          description: Cotacao criada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quote"
+        "400":
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+  /api/quotes/current:
+    get:
+      tags: [Quotes]
+      summary: Retorna cotacao vigente (mais recente por effective_at)
+      responses:
+        "200":
+          description: Cotacao atual ou null
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Quote"
+                  - type: "null"
+  /api/ads:
+    post:
+      tags: [Ads]
+      summary: Cria anuncio
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/CreateAdForm"
+      responses:
+        "201":
+          description: Anuncio criado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdItem"
+        "400":
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+    get:
+      tags: [Ads]
+      summary: Lista anuncios paginados com filtros
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [SALE, RENT]
+        - in: query
+          name: city
+          schema:
+            type: string
+        - in: query
+          name: state
+          schema:
+            type: string
+            minLength: 2
+            maxLength: 2
+        - in: query
+          name: min_price
+          schema:
+            type: number
+            format: float
+            minimum: 0
+        - in: query
+          name: max_price
+          schema:
+            type: number
+            format: float
+            minimum: 0
+      responses:
+        "200":
+          description: Lista paginada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdsListResponse"
+        "400":
+          description: Filtros invalidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppError"
+
+components:
+  schemas:
+    AppError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: VALIDATION_ERROR
+        message:
+          type: string
+          example: Dados invalidos.
+        details:
+          type: object
+          additionalProperties: true
+      required: [code, message]
+    Address:
+      type: object
+      properties:
+        cep:
+          type: string
+          example: "58000-000"
+        street:
+          type: string
+          example: Rua A
+        neighborhood:
+          type: string
+          example: Centro
+        city:
+          type: string
+          example: Joao Pessoa
+        state:
+          type: string
+          example: PB
+      required: [cep, street, neighborhood, city, state]
+    Quote:
+      type: object
+      properties:
+        id:
+          type: string
+        brl_to_usd:
+          type: number
+          format: float
+          example: 0.19
+        effective_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+      required: [id, brl_to_usd, effective_at, created_at]
+    CreateQuoteInput:
+      type: object
+      properties:
+        brl_to_usd:
+          type: number
+          format: float
+          minimum: 0.000001
+        effective_at:
+          type: string
+          format: date-time
+          description: Opcional. Se omitido, usa horario atual UTC.
+      required: [brl_to_usd]
+    CreateAdForm:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [SALE, RENT]
+        price_brl:
+          type: string
+          example: "100000.00"
+        cep:
+          type: string
+          example: "58000-000"
+        street:
+          type: string
+        number:
+          type: string
+          nullable: true
+        complement:
+          type: string
+          nullable: true
+        neighborhood:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+          minLength: 2
+          maxLength: 2
+        image:
+          type: string
+          format: binary
+          nullable: true
+      required: [type, price_brl, cep, street, neighborhood, city, state]
+    AdAddress:
+      type: object
+      properties:
+        cep:
+          type: string
+        street:
+          type: string
+        number:
+          type: string
+          nullable: true
+        complement:
+          type: string
+          nullable: true
+        neighborhood:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+      required: [cep, street, neighborhood, city, state]
+    AdItem:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [SALE, RENT]
+        price_brl:
+          type: number
+          format: float
+        price_usd:
+          type: number
+          format: float
+          nullable: true
+        image_url:
+          type: string
+          nullable: true
+          example: /static/images/abc.jpg
+        address:
+          $ref: "#/components/schemas/AdAddress"
+        created_at:
+          type: string
+          format: date-time
+      required: [id, type, price_brl, address, created_at]
+    QuoteUsed:
+      type: object
+      properties:
+        brl_to_usd:
+          type: number
+          format: float
+        effective_at:
+          type: string
+          format: date-time
+      required: [brl_to_usd, effective_at]
+    AdsListResponse:
+      type: object
+      properties:
+        page:
+          type: integer
+        page_size:
+          type: integer
+        total:
+          type: integer
+        quote_used:
+          allOf:
+            - $ref: "#/components/schemas/QuoteUsed"
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/AdItem"
+      required: [page, page_size, total, items]

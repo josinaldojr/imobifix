@@ -18,6 +18,9 @@ type Deps struct {
 
 func RegisterRoutes(app *fiber.App, d Deps) {
 	app.Get("/health", handlers.Health())
+	app.Get("/swagger", handlers.SwaggerUI())
+	app.Get("/swagger/", handlers.SwaggerUI())
+	app.Get("/swagger/openapi.yaml", handlers.SwaggerSpec())
 
 	api := app.Group("/api")
 
