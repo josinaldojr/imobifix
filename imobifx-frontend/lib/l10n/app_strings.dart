@@ -18,6 +18,10 @@ class AppStrings {
   String get adsTab => _isPt ? 'Anuncios' : 'Ads';
   String get createAdTab => _isPt ? 'Novo anuncio' : 'New ad';
   String get quoteTab => _isPt ? 'Cotacao' : 'Quote';
+  String get loginTitle => _isPt ? 'Autenticacao' : 'Login';
+  String get username => _isPt ? 'Usuario' : 'Username';
+  String get password => _isPt ? 'Senha' : 'Password';
+  String get login => _isPt ? 'Entrar' : 'Sign in';
 
   String get type => _isPt ? 'Tipo' : 'Type';
   String get sale => _isPt ? 'Venda' : 'Sale';
@@ -71,6 +75,8 @@ class AppStrings {
         return _isPt ? 'ViaCEP indisponivel.' : 'ViaCEP unavailable.';
       case 'INTERNAL_ERROR':
         return _isPt ? 'Erro interno.' : 'Internal error.';
+      case 'AUTH_INVALID':
+        return _isPt ? 'Credenciais invalidas.' : 'Invalid credentials.';
       default:
         return requestFailed;
     }

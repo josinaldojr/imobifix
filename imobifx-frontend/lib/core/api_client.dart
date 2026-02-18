@@ -20,10 +20,15 @@ class ApiClient {
   ApiClient({required this.baseUrl});
 
   final String baseUrl;
+  String? _authToken;
+
+  void setAuthToken(String? token) {
+    _authToken = token;
+  }
 
   Future<Map<String, dynamic>> lookupAddress(String cep) async {
     final uri = Uri.parse('$baseUrl/api/addresses/$cep');
-    final response = await http.get(uri);
+    final response = await http.get(uri, headers: _headers());
     return _decodeObject(response);
   }
 
@@ -38,7 +43,7 @@ class ApiClient {
     }
     final response = await http.post(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: _headers(contentType: 'application/json'),
       body: jsonEncode(body),
     );
     return _decodeObject(response);
@@ -51,6 +56,10 @@ class ApiClient {
     final uri = Uri.parse('$baseUrl/api/ads');
     final req = http.MultipartRequest('POST', uri);
     req.fields.addAll(fields);
+    final headers = _headers();
+    if (headers.isNotEmpty) {
+      req.headers.addAll(headers);
+    }
 
     if (image != null && image.bytes != null) {
       final mime = _inferMimeType(image);
@@ -96,7 +105,7 @@ class ApiClient {
     putIfNotBlank('max_price', maxPrice);
 
     final uri = Uri.parse('$baseUrl/api/ads').replace(queryParameters: params);
-    final response = await http.get(uri);
+    final response = await http.get(uri, headers: _headers());
     return _decodeObject(response);
   }
 
@@ -123,5 +132,16 @@ class ApiClient {
     if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) return 'image/jpeg';
     if (lower.endsWith('.webp')) return 'image/webp';
     return null;
+  }
+
+  Map<String, String> _headers({String? contentType}) {
+    final out = <String, String>{};
+    if (contentType != null) {
+      out['Content-Type'] = contentType;
+    }
+    if (_authToken != null && _authToken!.trim().isNotEmpty) {
+      out['Authorization'] = 'Bearer ${_authToken!}';
+    }
+    return out;
   }
 }

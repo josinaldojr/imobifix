@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/api_client.dart';
+import 'core/auth_client.dart';
 import 'l10n/app_strings.dart';
 import 'pages/ads_list_page.dart';
 import 'pages/create_ad_page.dart';
 import 'pages/create_quote_page.dart';
+import 'pages/login_page.dart';
 
 const _apiBaseUrl = String.fromEnvironment(
   'API_BASE_URL',
@@ -14,6 +16,10 @@ const _apiBaseUrl = String.fromEnvironment(
 const _appLocale = String.fromEnvironment(
   'APP_LOCALE',
   defaultValue: 'pt',
+);
+const _authBaseUrl = String.fromEnvironment(
+  'AUTH_BASE_URL',
+  defaultValue: 'http://localhost:9090',
 );
 
 void main() {
@@ -30,6 +36,7 @@ class ImobiFxFrontend extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppStrings(locale);
     final api = ApiClient(baseUrl: _apiBaseUrl);
+    final auth = AuthClient(baseUrl: _authBaseUrl);
 
     return MaterialApp(
       title: strings.appTitle,
@@ -44,15 +51,16 @@ class ImobiFxFrontend extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1F8A70)),
         useMaterial3: true,
       ),
-      home: RootPage(api: api, baseUrl: _apiBaseUrl),
+      home: RootPage(api: api, auth: auth, baseUrl: _apiBaseUrl),
     );
   }
 }
 
 class RootPage extends StatefulWidget {
-  const RootPage({super.key, required this.api, required this.baseUrl});
+  const RootPage({super.key, required this.api, required this.auth, required this.baseUrl});
 
   final ApiClient api;
+  final AuthClient auth;
   final String baseUrl;
 
   @override
@@ -61,10 +69,20 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage> {
   int _index = 0;
+  String? _token;
 
   @override
   Widget build(BuildContext context) {
     final s = AppStrings.of(context);
+    if (_token == null) {
+      return LoginPage(
+        auth: widget.auth,
+        onLoggedIn: (token) {
+          widget.api.setAuthToken(token);
+          setState(() => _token = token);
+        },
+      );
+    }
     final pages = [
       AdsListPage(api: widget.api, baseUrl: widget.baseUrl),
       CreateAdPage(api: widget.api),
